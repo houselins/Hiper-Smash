@@ -5,9 +5,9 @@
 //
 // hero sprite
 //
-function Hero(game, x, y) {
+function Hero(game, x, y, imagen) {
     // call Phaser.Sprite constructor
-    Phaser.Sprite.call(this, game, x, y, 'hero');
+    Phaser.Sprite.call(this, game, x, y, imagen);
 
     this.anchor.set(0.5, 0.5);
 }
@@ -23,7 +23,7 @@ Hero.prototype.constructor = Hero;
 PlayState = {};
 
 PlayState.preload = function () {
-    this.game.load.json('level:1', 'data/level01.json');
+    this.game.load.json('map01', 'data/map01.json');
 
     this.game.load.image('background', 'images/background.png');
     this.game.load.image('ground', 'images/ground.png');
@@ -33,18 +33,19 @@ PlayState.preload = function () {
     this.game.load.image('grass:2x1', 'images/grass_2x1.png');
     this.game.load.image('grass:1x1', 'images/grass_1x1.png');
     this.game.load.image('hero', 'images/hero_stopped.png');
+    this.game.load.image('hero1', 'images/hero1_stopped.png');
 };
 
 PlayState.create = function () {
     this.game.add.image(0, 0, 'background');
-    this._loadLevel(this.game.cache.getJSON('level:1'));
+    this._loadLevel(this.game.cache.getJSON('map01'));
 };
 
 PlayState._loadLevel = function (data) {
     // spawn all platforms
     data.platforms.forEach(this._spawnPlatform, this);
     // spawn hero and enemies
-    this._spawnCharacters({hero: data.hero, spiders: data.spiders});
+    this._spawnCharacters({hero: data.hero, spiders: data.spiders, hero1: data.hero1});
 };
 
 PlayState._spawnPlatform = function (platform) {
@@ -53,8 +54,10 @@ PlayState._spawnPlatform = function (platform) {
 
 PlayState._spawnCharacters = function (data) {
     // spawn hero
-    this.hero = new Hero(this.game, data.hero.x, data.hero.y);
+    this.hero = new Hero(this.game, data.hero.x, data.hero.y, "hero");
+    this.hero1 = new Hero(this.game, data.hero1.x, data.hero1.y, "hero1");
     this.game.add.existing(this.hero);
+    this.game.add.existing(this.hero1);
 };
 
 // =============================================================================
