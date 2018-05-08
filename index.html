@@ -15,12 +15,16 @@
 
     		rightPressed=true;
 
-    		}
-    		else if(e.keyCode==37){
+    		}else if(e.keyCode==37){
 
     		leftPressed=true;
-
     		}
+        if (e.keyCode==38) {
+          upPressed=true;
+        }
+        if (e.keyCode==87) {
+          wPressed=true;
+        }
     	}
       function keyUpHandler(e){
         if(e.keyCode==65){
@@ -37,6 +41,13 @@
       		leftPressed=false;
 
       		}
+          if (e.keyCode==87) {
+            wPressed=false;
+          }
+          if (e.keyCode==38) {
+            upPressed=false;
+
+          }
       	}
     </script>
     <script src="js/phaser.min.js"></script>
