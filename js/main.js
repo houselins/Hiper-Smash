@@ -3,11 +3,11 @@
 // =============================================================================
 //browser-sync start --server --files="**/*.js"
 //
-// hero sprite
+// HERO sprite
 //
-function Hero(game, x, y, imagen) {
+function Hero(game, x, y, image) {
     // call Phaser.Sprite constructor
-    Phaser.Sprite.call(this, game, x, y, imagen);
+    Phaser.Sprite.call(this, game, x, y, image);
 
     this.anchor.set(0.5, 0.5);
 }
@@ -41,6 +41,30 @@ PlayState.create = function () {
     this._loadLevel(this.game.cache.getJSON('map01'));
 };
 
+PlayState.update = function () {//mira cada fotograma si hay alguna tecla presionada
+    this._handleInput();
+};
+
+var rightPressed= false;
+var leftPressed=false;
+var aPressed=false;
+var dPressed=false;
+Hero.prototype.move = function (direction) {
+    this.x += direction * 2.5; // 2.5 pixels each frame
+};
+PlayState._handleInput = function () {//si la tecla es presionada
+  if (leftPressed) { // move hero left
+      this.hero.move(-1);
+  }
+  else if (rightPressed) { // move hero right
+      this.hero.move(1);
+  }
+  if (aPressed) {
+      this.hero1.move(-1);
+  }else if (dPressed) {
+      this.hero1.move(1);
+  }
+};
 PlayState._loadLevel = function (data) {
     // spawn all platforms
     data.platforms.forEach(this._spawnPlatform, this);

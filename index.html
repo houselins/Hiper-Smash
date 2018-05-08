@@ -2,7 +2,43 @@
 <head>
     <title>Hiper Smash</title>
     <meta charset="utf-8">
+    <script>
+    document.addEventListener("keydown",keyDownHandler,false);
+    document.addEventListener("keyup",keyUpHandler,false);
+    function keyDownHandler(e){
+      if (e.keyCode==65) {
+        aPressed=true;
+      }else if (e.keyCode==68) {
+          dPressed=true;
+      }
+    	if(e.keyCode==39){
 
+    		rightPressed=true;
+
+    		}
+    		else if(e.keyCode==37){
+
+    		leftPressed=true;
+
+    		}
+    	}
+      function keyUpHandler(e){
+        if(e.keyCode==65){
+      		aPressed=false;
+      	}else if (e.keyCode==68) {
+            dPressed=false;//jajajaj depresion
+        }
+      	if(e.keyCode==39){
+
+      		rightPressed=false;
+      	}
+      	else if(e.keyCode==37){
+
+      		leftPressed=false;
+
+      		}
+      	}
+    </script>
     <script src="js/phaser.min.js"></script>
     <script src="js/main.js"></script>
 
