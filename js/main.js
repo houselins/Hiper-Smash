@@ -8,7 +8,7 @@
 function Hero(game, x, y, image) {
     // call Phaser.Sprite constructor
     Phaser.Sprite.call(this, game, x, y, image);
-
+    this.arma =
     this.anchor.set(0.5, 0.5);
     this.game.physics.enable(this);
     this.body.collideWorldBounds = true; //si quieres que no se mueva mas del limite del mundo
@@ -157,7 +157,7 @@ PlayState._spawnCharacters = function (data) {
 // =============================================================================
 
 window.onload = function () {
-    let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
+    let game = new Phaser.Game(960, 600, Phaser.AUTO, 'Hyper Smash Sisters');
     game.state.add('play', PlayState);
     game.state.start('play');
 };
