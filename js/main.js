@@ -8,7 +8,7 @@
 function Hero(game, x, y, image) {
     // call Phaser.Sprite constructor
     Phaser.Sprite.call(this, game, x, y, image);
-    this.arma =
+
     this.anchor.set(0.5, 0.5);
     this.game.physics.enable(this);
     this.body.collideWorldBounds = true; //si quieres que no se mueva mas del limite del mundo
@@ -37,6 +37,7 @@ PlayState.preload = function () {
     this.game.load.image('hero1', 'images/hero1_stopped.png');
     this.game.load.audio('sfx:jump', 'audio/jump.wav');
     this.game.load.spritesheet('coin', 'images/coin_animated.png', 22, 22);
+    this.game.load.spritesheet('arma', 'images/pistola_animated.png', 22, 22, 7);
     this.game.load.audio('sfx:coin', 'audio/coin.wav');
 };
 
@@ -58,12 +59,12 @@ PlayState.update = function () {
 PlayState._handleCollisions = function () {
     this.game.physics.arcade.collide(this.hero1, this.platforms);//hacer que hero1 colisione con las plataformas
     this.game.physics.arcade.collide(this.hero, this.platforms);//hacer que hero colisione con las plataformas
-    this.game.physics.arcade.overlap(this.hero, this.coins, this._onHeroVsCoin, null, this);//hacer que hero recoja las cosas
-    this.game.physics.arcade.overlap(this.hero1, this.coins, this._onHeroVsCoin, null, this);//hacer que hero1 recoja las cosas
+    this.game.physics.arcade.overlap(this.hero, this.armas, this._onHeroVsCoin, null, this);//hacer que hero recoja las cosas
+    this.game.physics.arcade.overlap(this.hero1, this.armas, this._onHeroVsCoin, null, this);//hacer que hero1 recoja las cosas
 };
-PlayState._onHeroVsCoin = function (hero, coin) {
+PlayState._onHeroVsCoin = function (hero, arma) {
   this.sfx.coin.play();
-  coin.kill();
+  arma.kill();
 };
 var wPressed = false;
 var upPressed = false;
@@ -118,12 +119,12 @@ PlayState._handleInput = function () {//si la tecla es presionada
 PlayState._loadLevel = function (data) {
     // create all the groups/layers that we need
     this.platforms = this.game.add.group();
-    this.coins = this.game.add.group();
+    this.armas = this.game.add.group();
     // spawn  platforms
     data.platforms.forEach(this._spawnPlatform, this);
     // spawn hero and arañitas
     this._spawnCharacters({hero: data.hero, spiders: data.spiders, hero1: data.hero1});
-    data.coins.forEach(this._spawnCoin, this);
+    data.armas.forEach(this._spawnArma, this);
     const GRAVITY = 1200;
     this.game.physics.arcade.gravity.y = GRAVITY;
 };
@@ -136,10 +137,10 @@ PlayState._spawnPlatform = function (platform) {
     sprite.body.allowGravity = false;
     sprite.body.immovable = true;
 };
-PlayState._spawnCoin = function (coin) {
-    let sprite = this.coins.create(coin.x, coin.y, 'coin');
+PlayState._spawnArma = function (arma) {
+    let sprite = this.armas.create(arma.x, arma.y, 'arma');
     sprite.anchor.set(0.5, 0.5);
-    sprite.animations.add('rotate', [0, 1, 2, 1], 6, true); // 6fps, looped
+    sprite.animations.add('rotate', [0, 1, 2, 3, 4, 5, 6], 6, true); // 6fps, looped
     sprite.animations.play('rotate');
     this.game.physics.enable(sprite);
     sprite.body.allowGravity = false;
@@ -157,7 +158,7 @@ PlayState._spawnCharacters = function (data) {
 // =============================================================================
 
 window.onload = function () {
-    let game = new Phaser.Game(960, 600, Phaser.AUTO, 'Hyper Smash Sisters');
+    let game = new Phaser.Game(960, 600, Phaser.AUTO, 'game');
     game.state.add('play', PlayState);
     game.state.start('play');
 };
