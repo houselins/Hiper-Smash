@@ -18,6 +18,7 @@ function Hero(game, x, y, image) {
     this.animations.add('run', [1, 2], 8, true); // 8fps looped
     this.animations.add('jump', [3]);
     this.animations.add('fall', [4]);
+    this.animations.add('dead', [7,6,7,6,7]);
 }
 
 function Bullet(game, x, y, image) {
@@ -184,6 +185,7 @@ PlayState._Hero1VsHero = function (hero1, hero) {
     hero1.kill();
       this.sfx.victory.play();
       window.alert("Gana Finn el humano");
+      window.location.reload();
   }
   if (finnA && timeD>1) {
     hero1.hp-=25;
@@ -199,9 +201,10 @@ PlayState._onHeroVsCoin = function (hero, arma) {
 PlayState._onHeroVsBullet = function (hero, bullet) {
   if (hero.hp-25<=0) {
     hero.life=false;
-    hero.kill();
     this.sfx.victory.play();
+    hero.kill();
     window.alert("Gana Orl el calabaza");
+    window.location.reload();
   }
   hero.hp-=25;
   this.sfx.finnGasp.play();
@@ -253,6 +256,8 @@ Hero.prototype._getAnimationName = function () {
     }
     else if (this.body.velocity.x !== 0 && this.body.touching.down) {
         name = 'run';
+    }else if(!this.life){
+      name = 'dead';
     }
 
     return name;
@@ -360,7 +365,7 @@ if (this.a.isDown) {
     }
   }
 */
-  if (fPressed && timeA>2) {
+  if (fPressed && timeA>1) {
       weapon.fire();
       this.sfx.orlAttack.play();
       timeA=0;
@@ -422,8 +427,9 @@ PlayState._spawnCharacters = function (data) {
     this.gun = new Bullet(this.game, data.hero.x, data.hero.y, "gun");
     this.gun.body.allowGravity = false;
     this.game.add.existing(this.hero);
-    this.game.add.existing(this.hero1);
     this.game.add.existing(this.gun);
+    this.game.add.existing(this.hero1);
+
 };
 
 // =============================================================================
