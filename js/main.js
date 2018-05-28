@@ -68,6 +68,7 @@ PlayState.preload = function () {
     this.game.load.audio('sfx:orlAttack', 'audio/shot.wav');
     this.game.load.audio('sfx:finnGasp', 'audio/maleGasp.wav');
     this.game.load.audio('sfx:orlGasp', 'audio/orlGasp.wav');
+    this.game.load.audio('sfx:victory', 'audio/victory.wav');
     this.game.load.image('icon:hp', 'images/hpFinn.png');
     this.game.load.image('icon:hp1', 'images/hpOrl.png');
     this.game.load.image('font:numbers', 'images/numbers.png');
@@ -100,7 +101,8 @@ PlayState.create = function () {
       finnAtack: this.add.audio('sfx:finnAttack'),
       orlAttack: this.add.audio('sfx:orlAttack'),
       finnGasp: this.add.audio('sfx:finnGasp'),
-      orlGasp: this.add.audio('sfx:orlGasp')
+      orlGasp: this.add.audio('sfx:orlGasp'),
+      victory: this.add.audio('sfx:victory')
   };
   //  Creates 1 single bullet, using the 'bullet' graphic
     weapon = this.game.add.weapon(1, 'bullet');
@@ -136,6 +138,7 @@ PlayState.update = function () {
     this.gun.body.y=this.hero.body.y+15;
     this.coinFont.text = `x${this.hero1.hp}`;
     this.coinFont1.text = `x${this.hero.hp}`;
+
 };
 PlayState._createHud = function () {
   const NUMBERS_STR = '0123456789X ';
@@ -177,8 +180,10 @@ PlayState._platformsVsBullet = function (platform, bullet) {
 PlayState._Hero1VsHero = function (hero1, hero) {
   if (finnA && timeD>1 && hero1.hp-25<=0) {
     hero1.life=false;
-    hero1.kill();
     this.gun.kill();
+    hero1.kill();
+      this.sfx.victory.play();
+      window.alert("Gana Finn el humano");
   }
   if (finnA && timeD>1) {
     hero1.hp-=25;
@@ -192,9 +197,11 @@ PlayState._onHeroVsCoin = function (hero, arma) {
   arma.kill();
 };
 PlayState._onHeroVsBullet = function (hero, bullet) {
-  if (hero.hp-25==0) {
+  if (hero.hp-25<=0) {
     hero.life=false;
     hero.kill();
+    this.sfx.victory.play();
+    window.alert("Gana Orl el calabaza");
   }
   hero.hp-=25;
   this.sfx.finnGasp.play();
