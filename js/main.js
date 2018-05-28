@@ -1,15 +1,15 @@
 // =============================================================================
 // sprites
 // =============================================================================
-//browser-sync start --server --files="**/*.js"
+// browser-sync start --server --files="**/*.js"
 //
 // HERO sprite
 //
 
-function Hero(game, x, y, image) {
-    // call Phaser.Sprite constructor
-    Phaser.Sprite.call(this, game, x, y, image);
-    this.life=true;
+function Hero (game, x, y, image) {
+// call Phaser.Sprite constructor
+Phaser.Sprite.call (this, game, x, y, image);
+this.life = true;
     this.hp=100;
     this.anchor.set(0.5, 0.5);
     this.game.physics.enable(this);
@@ -68,6 +68,7 @@ PlayState.preload = function () {
     this.game.load.audio('sfx:finnAttack', 'audio/attackSword.wav');
     this.game.load.audio('sfx:orlAttack', 'audio/shot.wav');
     this.game.load.audio('sfx:finnGasp', 'audio/maleGasp.wav');
+		this.game.load.audio('sfx:metalHit', 'audio/metalHit.wav');
     this.game.load.audio('sfx:orlGasp', 'audio/orlGasp.wav');
     this.game.load.audio('sfx:victory', 'audio/victory.wav');
     this.game.load.image('icon:hp', 'images/hpFinn.png');
@@ -103,7 +104,8 @@ PlayState.create = function () {
       orlAttack: this.add.audio('sfx:orlAttack'),
       finnGasp: this.add.audio('sfx:finnGasp'),
       orlGasp: this.add.audio('sfx:orlGasp'),
-      victory: this.add.audio('sfx:victory')
+      victory: this.add.audio('sfx:victory'),
+			metalHit: this.add.audio('sfx:metalHit')
   };
   //  Creates 1 single bullet, using the 'bullet' graphic
     weapon = this.game.add.weapon(1, 'bullet');
@@ -186,6 +188,7 @@ PlayState._Hero1VsHero = function (hero1, hero) {
       this.sfx.victory.play();
       window.alert("Gana Finn el humano");
       window.location.reload();
+
   }
   if (finnA && timeD>1) {
     hero1.hp-=25;
@@ -199,16 +202,20 @@ PlayState._onHeroVsCoin = function (hero, arma) {
   arma.kill();
 };
 PlayState._onHeroVsBullet = function (hero, bullet) {
-  if (hero.hp-25<=0) {
+	if (finnA) {
+		this.sfx.metalHit.play();
+	if (hero.hp-25<=0) {
     hero.life=false;
     this.sfx.victory.play();
     hero.kill();
     window.alert("Gana Orl el calabaza");
     window.location.reload();
   }
+}else{
   hero.hp-=25;
   this.sfx.finnGasp.play();
   bullet.kill();
+}
 };
 /*
 PlayState._onHeroVsBullet = function (hero, bullet) {
