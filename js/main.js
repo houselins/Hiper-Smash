@@ -126,8 +126,8 @@ PlayState.update = function () {
     this._handleCollisions();
     this._handleInput();
     this.gun.body.y=this.hero.body.y+15;
-    this.coinFont.text = `x${this.hero.hp}`;
-    this.coinFont1.text = `x${this.hero1.hp}`;
+    this.coinFont.text = `x${this.hero1.hp}`;
+    this.coinFont1.text = `x${this.hero.hp}`;
 };
 PlayState._createHud = function () {
   const NUMBERS_STR = '0123456789X ';
@@ -135,8 +135,8 @@ PlayState._createHud = function () {
        NUMBERS_STR, 6);
        this.coinFont1 = this.game.add.retroFont('font:numbers', 20, 26,
            NUMBERS_STR, 6);
-    let hpIcon = this.game.make.image(0, 0, 'icon:hp');
-    let hpIcon1 = this.game.make.image(150, 0, 'icon:hp1');
+    let hpIcon = this.game.make.image(150, 0, 'icon:hp');
+    let hpIcon1 = this.game.make.image(0, 0, 'icon:hp1');
     let coinScoreImg = this.game.make.image(hpIcon.x + hpIcon.width,
         hpIcon.height / 2, this.coinFont);
     let coinScoreImg1 = this.game.make.image(hpIcon1.x + hpIcon1.width,
@@ -147,8 +147,8 @@ PlayState._createHud = function () {
     this.hud1= this.game.add.group();
     this.hud.add(hpIcon);
     this.hud1.add(hpIcon1);
-    this.hud.position.set(10, 10);
-    this.hud1.position.set(40 , 10);
+    this.hud.position.set(40, 10);
+    this.hud1.position.set(10 , 10);
     this.hud.add(coinScoreImg);
     this.hud1.add(coinScoreImg1);
 };
