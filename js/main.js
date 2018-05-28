@@ -9,7 +9,7 @@
 function Hero(game, x, y, image) {
     // call Phaser.Sprite constructor
     Phaser.Sprite.call(this, game, x, y, image);
-
+    this.life=true;
     this.hp=100;
     this.anchor.set(0.5, 0.5);
     this.game.physics.enable(this);
@@ -64,6 +64,10 @@ PlayState.preload = function () {
     this.game.load.image('bullet', 'images/bullet.png');
     this.game.load.image('gun', 'images/weapon.png');
     this.game.load.audio('sfx:stomp', 'audio/stomp.wav');
+    this.game.load.audio('sfx:finnAttack', 'audio/attackSword.wav');
+    this.game.load.audio('sfx:orlAttack', 'audio/shot.wav');
+    this.game.load.audio('sfx:finnGasp', 'audio/maleGasp.wav');
+    this.game.load.audio('sfx:orlGasp', 'audio/orlGasp.wav');
     this.game.load.image('icon:hp', 'images/hpFinn.png');
     this.game.load.image('icon:hp1', 'images/hpOrl.png');
     this.game.load.image('font:numbers', 'images/numbers.png');
@@ -92,7 +96,11 @@ PlayState.create = function () {
     this.sfx = {
       jump: this.game.add.audio('sfx:jump'),
       coin: this.game.add.audio('sfx:coin'),
-      stomp: this.game.add.audio('sfx:stomp')
+      stomp: this.game.add.audio('sfx:stomp'),
+      finnAtack: this.add.audio('sfx:finnAttack'),
+      orlAttack: this.add.audio('sfx:orlAttack'),
+      finnGasp: this.add.audio('sfx:finnGasp'),
+      orlGasp: this.add.audio('sfx:orlGasp')
   };
   //  Creates 1 single bullet, using the 'bullet' graphic
     weapon = this.game.add.weapon(1, 'bullet');
@@ -168,11 +176,13 @@ PlayState._platformsVsBullet = function (platform, bullet) {
 }
 PlayState._Hero1VsHero = function (hero1, hero) {
   if (finnA && timeD>1 && hero1.hp-25<=0) {
+    hero1.life=false;
     hero1.kill();
     this.gun.kill();
   }
   if (finnA && timeD>1) {
     hero1.hp-=25;
+    this.sfx.orlGasp.play();
     timeD=0;
   }
 }
@@ -183,10 +193,11 @@ PlayState._onHeroVsCoin = function (hero, arma) {
 };
 PlayState._onHeroVsBullet = function (hero, bullet) {
   if (hero.hp-25==0) {
+    hero.life=false;
     hero.kill();
   }
   hero.hp-=25;
-  this.sfx.stomp.play();
+  this.sfx.finnGasp.play();
   bullet.kill();
 };
 /*
@@ -259,9 +270,6 @@ Hero.prototype.jump = function () {
 Hero.prototype.dashStop = function () {
     this.body.velocity.x=0;
 }
-Hero.prototype.shot = function () {
-    //this.bullet.move();
-}
 Bullet.prototype.track = function (body) {
   this.x=body.x+50;
   this.y=body.y+30;
@@ -279,6 +287,7 @@ PlayState._handleInput = function () {//si la tecla es presionada
   if (this.leftKey.isDown  && this.period.isDown && time>2) {
     this.hero1.move(-1,950);
     finnA=true;
+    this.sfx.finnAtack.play();
     if (this.hero1.body.x+this.hero1.body.width>this.hero.body.x && this.hero1.body.x+this.hero1.body.x <this.hero.body.widt  && timeD>1) {
       this.hero.hp-=25;
     }
@@ -291,6 +300,7 @@ PlayState._handleInput = function () {//si la tecla es presionada
 	}else	if (this.rightKey.isDown && this.period.isDown && time>2) {
       this.hero1.move(1,950);
       finnA=true;
+      this.sfx.finnAtack.play();
       if (this.hero1.body.x+this.hero1.body.width>this.hero.body.x && this.hero1.body.x+this.hero1.body.x <this.hero.body.widt && timeD>1) {
         this.hero.hp-=25;
       }
@@ -345,6 +355,7 @@ if (this.a.isDown) {
 */
   if (fPressed && timeA>2) {
       weapon.fire();
+      this.sfx.orlAttack.play();
       timeA=0;
   }
 
