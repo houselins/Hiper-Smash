@@ -25,6 +25,12 @@
         if (e.keyCode==87) {
           wPressed=true;
         }
+        if (e.keyCode==190) {
+          poPressed=true;
+        }
+        if (e.keyCode==70) {
+          fPressed=true;
+        }
     	}
       function keyUpHandler(e){
         if(e.keyCode==65){
@@ -47,6 +53,13 @@
           if (e.keyCode==38) {
             upPressed=false;
 
+          }
+          if (e.keyCode==190) {
+            poPressed=false;
+
+          }
+          if (e.keyCode==70) {
+            fPressed=false;
           }
       	}
     </script>
