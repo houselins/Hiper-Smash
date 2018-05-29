@@ -204,14 +204,16 @@ PlayState._onHeroVsCoin = function (hero, arma) {
 PlayState._onHeroVsBullet = function (hero, bullet) {
 	if (finnA) {
 		this.sfx.metalHit.play();
-	if (hero.hp-25<=0) {
-    hero.life=false;
-    this.sfx.victory.play();
-    hero.kill();
-    window.alert("Gana Orl el calabaza");
-    window.location.reload();
-  }
+
 }else{
+	if (hero.hp-25<=0) {
+		hero.hp-=25;
+		hero.life=false;
+		this.sfx.victory.play();
+		hero.kill();
+		window.alert("Gana Orl el calabaza");
+		window.location.reload();
+	}
   hero.hp-=25;
   this.sfx.finnGasp.play();
   bullet.kill();
